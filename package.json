@@ -14,8 +14,31 @@
   "contributes": {
     "commands": [
       {
-        "command": "vscode-cirko.helloWorld",
-        "title": "Hello World"
+        "command": "vscode-cirko.convertSelection",
+        "title": "Konvertuj selektovani tekst"
+      }
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "command": "vscode-cirko.convertSelection",
+          "when": "editorHasSelection",
+          "group": "navigation"
+        }
+      ],
+      "commandPalette": [
+        {
+          "command": "vscode-cirko.convertSelection",
+          "when": "editorHasSelection",
+          "group": "navigation"
+        }
+      ]
+    },
+    "keybindings": [
+      {
+        "command": "vscode-cirko.convertSelection",
+        "key": "F6",
+        "when": "editorTextFocus && editorHasSelection"
       }
     ]
   },
