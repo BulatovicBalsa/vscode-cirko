@@ -1,0 +1,61 @@
+name: Release VS Code Extension
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout koda
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Povlači sve tagove radi provere postojanja verzije
+
+      - name: Podešavanje Node.js okruženja
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Instalacija zavisnosti
+        run: npm ci
+
+      - name: Čitanje verzije iz package.json
+        id: get_version
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Provera da li tag već postoji
+        id: check_tag
+        run: |
+          TAG="v${{ steps.get_version.outputs.version }}"
+          if git rev-parse "$TAG" >/dev/null 2>&1; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+            echo "Tag $TAG već postoji. Preskače se kreiranje release-a."
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
+            echo "Nova verzija uočena: $TAG"
+          fi
+
+      - name: Pakovanje VS Code ekstenzije (.vsix)
+        if: steps.check_tag.outputs.exists == 'false'
+        run: npx @vscode/vsce package -o vscode-cirko-${{ steps.get_version.outputs.version }}.vsix
+
+      - name: Kreiranje GitHub Release-a
+        if: steps.check_tag.outputs.exists == 'false'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ steps.get_version.outputs.version }}
+          name: Release v${{ steps.get_version.outputs.version }}
+          generate_release_notes: true
+          files: vscode-cirko-*.vsix
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
