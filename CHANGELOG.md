@@ -6,4 +6,10 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased]
 
+## [0.0.2] - 2026-08-16
+
+- Added support for multiline selection conversion.
+
+## [0.0.1] - 2026-08-16
+
 - Initial release

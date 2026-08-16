@@ -30,3 +30,7 @@ This extension does not contribute any settings yet.
 ### 0.0.1
 
 Initial release of vscode-cirko.
+
+### 0.0.2
+
+Added support for multiline selection conversion.
