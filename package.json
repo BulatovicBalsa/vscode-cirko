@@ -1,8 +1,8 @@
 {
   "name": "vscode-cirko",
   "displayName": "vscode-cirko",
-  "description": "Ekstenzija za Cirko latnicno-cirilicni konvertor",
-  "version": "0.0.1",
+  "description": "Ekstenzija za Cirko latnično-ćirilični konvertor",
+  "version": "0.0.2",
   "engines": {
     "vscode": "^1.125.0"
   },
